@@ -14,4 +14,5 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nThanks for Playing!")
         #live.stopLiveMode()
+        step.stopStepMode()
         exit()

@@ -22,6 +22,7 @@ Circuit setup (Tested on Raspberry Pi3 Model B+):
 """
 import RPi.GPIO as GPIO
 import pygame
+import time
 
 class StepPlay:
     """Defines functionality for the step sequencer"""
@@ -130,10 +131,34 @@ class StepPlay:
                               callback=lambda x:self.__recCB(x),
                               bouncetime=200)					 
         
+        self.play()
+        
+    def play(self):
+        step_time = 0.1#5000.0 / 120 #( / bpm)
+        step = -1
+        next_time = time.time()
+        p1 = [ False, True, False, False, False, False ]
+        p2 = [ False, False, False, False, False, False ]
+        grid = [ p1, p2, p1, p1, p2, p2, p1, p2, p1, p2, p1, p2 ]
+        
+        while True:
+            if time.time() >= next_time:
+                step = (step + 1) % 12
+                self.playpattern(grid, step)
+                next_time += step_time
+        
+    def playpattern(self, grid, step):
+        pattern = grid[step]
+        
+        for i in range(6):
+            if pattern[i]:
+                self.__samples[i].play()
+        
         
     def stopStepMode(self):
         # Cleanup function: Destroys pygame objects and removes button 
         # callbacks
         pygame.quit()
+        GPIO.output(self.__LED, GPIO.LOW)
         #for button in self.__buttons:
         #    GPIO.remove_event_detect(button)
