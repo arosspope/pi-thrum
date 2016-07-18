@@ -7,7 +7,6 @@ Circuit setup (Tested on Raspberry Pi3 Model B+):
     GPIO22 ___/ ___ GND      - Button 4
     GPIO23 ___/ ___ GND      - Button 5
 """
-import threading
 import RPi.GPIO as GPIO
 import pygame
 
