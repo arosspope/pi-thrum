@@ -32,9 +32,9 @@ class StepPlay:
     #	* Buttons 6 - 11, are for the step seq only
     __soundBNTs = [ 4, 18, 17, 27, 22, 23 ]
     __stepBNTs 	= [ 24, 25, 5, 6, 12, 13 ]
-    __playBNT	= 19
+    __playBNT	= 19 
     __recBNT 	= 16
-    __LED		= 26
+    __LED		= 26 
 
     # Samples for Live play
     __samples 	= []
@@ -43,27 +43,60 @@ class StepPlay:
     __soundCBs	= []
     __stepCBS	= []
     
-    def __prtVerb(self, mesg):
-        if self.__verbose:
-            print(mesg)
+    def __init__(self, verbose=False):
+        self.__GPIOInit()
+        self.__soundInit()
+        self.__verbose = verbose
+        self.__playSteps = False
+    
+    def runStepMode(self):
+        # Initialise callbacks - which will start multi-threading
+        self.__initCBs()
+        self.play() 
+    
+    def play(self):
+        p1 = [ False, True, False, False, False, False ]
+        p2 = [ False, False, False, False, False, False ]
+        grid = [ p1, p2, p1, p1, p2, p2, p1, p2, p1, p2, p1, p2 ]
+        
+        step_time = 0.1 #5000.0 / 120 #( / bpm)
+        step = -1
+        next_time = time.time()
+        
+        
+        while True:
+            if self.__playSteps:
+                if time.time() >= next_time:
+                    step = (step + 1) % 12
+                    self.playpattern(grid, step)
+                    next_time += step_time
+        
+    def playpattern(self, grid, step):
+        pattern = grid[step]
+        
+        for i in range(6):
+            if pattern[i]:
+                self.__samples[i].play()
+        
+    def stopStepMode(self):
+        # Cleanup function: Destroys pygame objects and de-init GPIO pins
+        pygame.quit()
+        GPIO.output(self.__LED, GPIO.LOW)
+        GPIO.cleanup()
     
     def __GPIOInit(self):
         # Set mode PIN numbering to BCM, and define GPIO pin functions
         GPIO.setmode(GPIO.BCM)
-		
-		# Func for sound buttons
-        for button in self.__soundBNTs:
-            GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         
-        # Func for step buttons
-        for button in self.__stepBNTs:
-            GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-            
-        # Func for play & rec buttons
-        GPIO.setup(self.__playBNT, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.setup(self.__recBNT, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        # Setup Function for input Pins
+        inputBNTs = (self.__soundBNTs + self.__stepBNTs)
+        inputBNTs.append(self.__playBNT)
+        inputBNTs.append(self.__recBNT)
 		
-		# Func for LED output
+        for b in inputBNTs:
+            GPIO.setup(b, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+		
+		# Func for ouput Pins
         GPIO.setup(self.__LED, GPIO.OUT)
 		
     def __soundInit(self):
@@ -82,83 +115,46 @@ class StepPlay:
         for sample in self.__samples:
             sample.set_volume(.95)
 
-    def __init__(self, verbose=False):
-        self.__GPIOInit()
-        self.__soundInit()
-        self.__verbose = verbose
-
+    def __initCBs(self):
+        # Initialise the Callback functions for each Input IO pin
+        # Sound Button Callbacks:
+        for i in range(6):
+            bnt = self.__soundBNTs[i]
+            smp = self.__samples[i]
+            GPIO.add_event_detect(bnt, GPIO.RISING, callback=lambda x,y=smp:
+                                  self.__soundCB(x, y), bouncetime=200)
+                                  
+        # Step Button Callbacks:
+        for bnt in self.__stepBNTs:
+            GPIO.add_event_detect(bnt, GPIO.RISING, callback=lambda x:
+                                  self.__stepCB(x), bouncetime=200)
+                                  
+        # Play Button Callback:
+        GPIO.add_event_detect(self.__playBNT, GPIO.RISING, callback=lambda x:
+                              self.__playCB(x), bouncetime=200)
+                              
+        # Record Button Callback:
+        GPIO.add_event_detect(self.__recBNT, GPIO.RISING, callback=lambda x:
+                              self.__recCB(x), bouncetime=200)
+    
     def __soundCB(self, channel, sound):
-        self.__prtVerb("Channel {0} pressed".format(channel))
+        self.__prtVerb("Sound bnt IO-{0}".format(channel))
         sound.play()
         # TODO: implement
             
     def __stepCB(self, channel):
-        self.__prtVerb("Channel {0} pressed".format(channel))
+        self.__prtVerb("Step bnt IO-{0}".format(channel))
 		# TODO: implement
     
     def __playCB(self, channel):
-        self.__prtVerb("Channel {0} pressed".format(channel))
+        self.__prtVerb("Play bnt IO-{0}".format(channel))
+        self.__playSteps = not self.__playSteps # Toggle playing
 		# TODO: implement
         
     def __recCB(self, channel):
-        self.__prtVerb("Channel {0} pressed".format(channel))
-        
-        if GPIO.input(self.__LED):
-            GPIO.output(self.__LED, GPIO.LOW)
-        else:
-            GPIO.output(self.__LED, GPIO.HIGH)
-
-    def runStepMode(self):
-        # This method simply defines the functionality upon button press
-        # (defining the callbacks upon event detection)
-        for i in range(6):
-            button = self.__soundBNTs[i]
-            sample = self.__samples[i]
-            
-            GPIO.add_event_detect(button, GPIO.RISING, callback=lambda x, 
-                                  y=sample: self.__soundCB(x, y),
-								  bouncetime=200)
-                                  
-        for button in self.__stepBNTs:
-            GPIO.add_event_detect(button, GPIO.RISING, callback=lambda x:
-                                  self.__stepCB(x), bouncetime=200)
-                                  
-        GPIO.add_event_detect(self.__playBNT, GPIO.RISING,
-                              callback=lambda x:self.__playCB(x), 
-                              bouncetime=200)
-                              
-        GPIO.add_event_detect(self.__recBNT, GPIO.RISING,
-                              callback=lambda x:self.__recCB(x),
-                              bouncetime=200)					 
-        
-        self.play()
-        
-    def play(self):
-        step_time = 0.1#5000.0 / 120 #( / bpm)
-        step = -1
-        next_time = time.time()
-        p1 = [ False, True, False, False, False, False ]
-        p2 = [ False, False, False, False, False, False ]
-        grid = [ p1, p2, p1, p1, p2, p2, p1, p2, p1, p2, p1, p2 ]
-        
-        while True:
-            if time.time() >= next_time:
-                step = (step + 1) % 12
-                self.playpattern(grid, step)
-                next_time += step_time
-        
-    def playpattern(self, grid, step):
-        pattern = grid[step]
-        
-        for i in range(6):
-            if pattern[i]:
-                self.__samples[i].play()
-        
-        
-    def stopStepMode(self):
-        # Cleanup function: Destroys pygame objects and removes button 
-        # callbacks
-        pygame.quit()
-        GPIO.output(self.__LED, GPIO.LOW)
-        #for button in self.__buttons:
-        #    GPIO.remove_event_detect(button)
+        self.__prtVerb("Record bnt IO-{0}".format(channel))
+        GPIO.output(self.__LED, not GPIO.input(self.__LED)) # Toggle LED
+       
+    def __prtVerb(self, mesg):
+        if self.__verbose:
+            print(mesg)
