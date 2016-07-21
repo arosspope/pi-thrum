@@ -1,4 +1,3 @@
-from modes import thrum_live
 from modes import step
 
 if __name__ == "__main__":
