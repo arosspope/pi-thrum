@@ -8,7 +8,7 @@ import RPi.GPIO as GPIO
 import pygame
 import time
 
-class StepPlay:
+class Step:
     # Map the GPIO pins to each button
     # Note:
     #	* Buttons 0 - 5, play sound AND are used as part of the step seq
