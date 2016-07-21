@@ -36,53 +36,53 @@ class StepPlay:
     __recBNT 	= 16
     __LED		= 26 
 
-    # Samples for Live play
+    # Sound samples
     __samples 	= []
-
-    # Callbacks for each button
-    __soundCBs	= []
-    __stepCBS	= []
     
-    def __init__(self, verbose=False):
+    
+    def __init__(self, verbose=False, bpm=150000.0):
         self.__GPIOInit()
         self.__soundInit()
+        
+        # Initialise class variables
         self.__verbose = verbose
         self.__playSteps = False
+        self.__bpm = bpm
+        self.__stepTime = 15000.0 / bpm
+        self.__stepPatterns = []
+        
+        # Initialise pattern for each step (i.e. what sounds will play)
+        for i in range(12):
+            self.__stepPatterns.append(([False] * 6))
     
     def run(self):
         # Initialise callbacks - which will start multi-threading
         self.__initCBs()
         
-        p1 = [ False, True, False, False, False, False ]
-        p2 = [ False, False, False, False, False, False ]
-        grid = [ p1, p2, p1, p1, p2, p2, p1, p2, p1, p2, p1, p2 ]
-        
-        step_time = 0.1 #5000.0 / 120 #( / bpm)
         step = -1
         next_time = time.time()
         
+        # Begin main loop - will halt when user supplies CTRL+C
         while True:
             if self.__playSteps:
                 if time.time() >= next_time:
                     step = (step + 1) % 12
-                    self.playpattern(grid, step)
-                    next_time += step_time
-        
-        
-    def playpattern(self, grid, step):
-        pattern = grid[step]
-        
-        for i in range(6):
-            if pattern[i]:
-                self.__samples[i].play()
+                    self.__playPattern(self.__stepPatterns[step])
+                    next_time += self.__stepTime
         
     def cleanup(self):
         # Should be called before program exit
         # Destroys pygame objects and de-init GPIO pins
         pygame.quit()
         GPIO.output(self.__LED, GPIO.LOW)
-        GPIO.cleanup()
+        GPIO.cleanup()    
     
+    def __playPattern(self, pattern):
+        for sound in range(6):
+            # If the pattern has the sound, play it
+            if pattern[sound]:
+                self.__samples[sound].play()
+
     def __GPIOInit(self):
         # Set mode PIN numbering to BCM, and define GPIO pin functions
         GPIO.setmode(GPIO.BCM)
