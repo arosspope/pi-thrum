@@ -1,24 +1,8 @@
 """
-Circuit setup (Tested on Raspberry Pi3 Model B+):
-    GPIO4  ___/ ___ GND		- Button 0
-    GPIO18 ___/ ___ GND     - Button 1
-    GPIO17 ___/ ___ GND     - Button 2
-    GPIO27 ___/ ___ GND     - Button 3
-    
-    GPIO22 ___/ ___ GND     - Button 4
-    GPIO23 ___/ ___ GND     - Button 5
-    GPIO24 ___/ ___ GND     - Button 6
-    GPIO25 ___/ ___ GND     - Button 7
-    
-    GPIO5  ___/ ___ GND     - Button 8
-    GPIO6  ___/ ___ GND     - Button 9
-    GPIO12 ___/ ___ GND     - Button 10
-    GPIO13 ___/ ___ GND     - Button 11
-    
-    GPIO19 ___/ ___ GND		- Play (Button)
-    GPIO16 ___/ ___ GND		- REC (Button)
-    
-    GPIO26 -->|-[330R]- GND - LED
+This module defines the functionality behind running the 12-step sequencer.
+For information regarding the circuit setup please refer to 'pi-thrum-schem'.
+
+@author Andrew Pope
 """
 import RPi.GPIO as GPIO
 import pygame
@@ -32,9 +16,9 @@ class StepPlay:
     __soundBNTs     = [ 4, 18, 17, 27, 22, 23 ]
     __stepBNTs 	    = [ 24, 25, 5, 6, 12, 13 ]
     __stepChannels  = [ 4, 18, 17, 27, 22, 23, 24, 25, 5, 6, 12, 13 ]
-    __playBNT	= 19 
-    __recBNT 	= 16
-    __LED		= 26
+    __playBNT   = 19 
+    __recBNT    = 16
+    __LED       = 26
     
     
     def __init__(self, verbose=False, bpm=120000.0):
