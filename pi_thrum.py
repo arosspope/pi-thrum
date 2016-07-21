@@ -2,17 +2,14 @@ from modes import thrum_live
 from modes import thrum_step
 
 if __name__ == "__main__":
-    #live = thrum_live.LivePlay(verbose=True)
-    #live.runLiveMode()
+    print("Welcome to pi-thrum! An interactive 12-step sequencer for"
+          " drum samples!\nTo stop program press CTRL+C\n")
     
     step = thrum_step.StepPlay(verbose=True)
-    step.runStepMode()
-
+    
     try:
-        while True:
-            pass
+        step.run()
     except KeyboardInterrupt:
         print("\nThanks for Playing!")
-        #live.stopLiveMode()
-        step.stopStepMode()
+        step.cleanup()
         exit()

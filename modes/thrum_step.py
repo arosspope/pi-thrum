@@ -49,12 +49,10 @@ class StepPlay:
         self.__verbose = verbose
         self.__playSteps = False
     
-    def runStepMode(self):
+    def run(self):
         # Initialise callbacks - which will start multi-threading
         self.__initCBs()
-        self.play() 
-    
-    def play(self):
+        
         p1 = [ False, True, False, False, False, False ]
         p2 = [ False, False, False, False, False, False ]
         grid = [ p1, p2, p1, p1, p2, p2, p1, p2, p1, p2, p1, p2 ]
@@ -63,13 +61,13 @@ class StepPlay:
         step = -1
         next_time = time.time()
         
-        
         while True:
             if self.__playSteps:
                 if time.time() >= next_time:
                     step = (step + 1) % 12
                     self.playpattern(grid, step)
                     next_time += step_time
+        
         
     def playpattern(self, grid, step):
         pattern = grid[step]
@@ -78,8 +76,9 @@ class StepPlay:
             if pattern[i]:
                 self.__samples[i].play()
         
-    def stopStepMode(self):
-        # Cleanup function: Destroys pygame objects and de-init GPIO pins
+    def cleanup(self):
+        # Should be called before program exit
+        # Destroys pygame objects and de-init GPIO pins
         pygame.quit()
         GPIO.output(self.__LED, GPIO.LOW)
         GPIO.cleanup()
