@@ -6,7 +6,7 @@ For information regarding the circuit setup please refer to 'pi-thrum-schem'.
 """
 import RPi.GPIO as GPIO
 import pygame
-import time
+import time, os
 
 class Step:
     # Map the GPIO pins to each button
@@ -109,13 +109,15 @@ class Step:
         pygame.mixer.pre_init(44100, -16, 12, 512) # TODO: Tweak values?
         pygame.init()
         
+        os.getcwd()
+        
         # Load sounds from samples folder
-        self.__samples.append(pygame.mixer.Sound('samples/606SNAR.WAV'))
-        self.__samples.append(pygame.mixer.Sound('samples/CR8KBASS.WAV'))
-        self.__samples.append(pygame.mixer.Sound('samples/CR8KCLAP.WAV'))
-        self.__samples.append(pygame.mixer.Sound('samples/CR8KHITM.WAV'))
-        self.__samples.append(pygame.mixer.Sound('samples/CR8KSNAR.WAV'))
-        self.__samples.append(pygame.mixer.Sound('samples/snare.wav'))
+        self.__samples.append(pygame.mixer.Sound('samples/Blop-01.wav')))
+        self.__samples.append(pygame.mixer.Sound('samples/Glitch-02.wav'))
+        self.__samples.append(pygame.mixer.Sound('samples/Hit-03.wav'))
+        self.__samples.append(pygame.mixer.Sound('samples/Noise-04.wav'))
+        self.__samples.append(pygame.mixer.Sound('samples/SFX-05.wav'))
+        self.__samples.append(pygame.mixer.Sound('samples/Strike-06.wav'))
 
         for sample in self.__samples:
             sample.set_volume(.95)

@@ -3,7 +3,7 @@ Entry to the 'pi-thrum' program.
 
 @author Andrew Pope
 """
-from modes import step
+import step
 
 if __name__ == "__main__":
     print("Welcome to pi-thrum! An interactive 12-step sequencer for"
