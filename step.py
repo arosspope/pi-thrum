@@ -6,7 +6,7 @@ For information regarding the circuit setup please refer to 'pi-thrum-schem'.
 """
 import RPi.GPIO as GPIO
 import pygame
-import time, os
+import time
 
 class Step:
     # Map the GPIO pins to each button
@@ -109,12 +109,10 @@ class Step:
         pygame.mixer.pre_init(44100, -16, 12, 512) # TODO: Tweak values?
         pygame.init()
         
-        os.getcwd()
-        
         # Load sounds from samples folder
-        self.__samples.append(pygame.mixer.Sound('samples/Blop-01.wav')))
+        self.__samples.append(pygame.mixer.Sound('samples/Blop-01.wav'))
         self.__samples.append(pygame.mixer.Sound('samples/Glitch-02.wav'))
-        self.__samples.append(pygame.mixer.Sound('samples/Hit-03.wav'))
+        self.__samples.append(pygame.mixer.Sound('samples/Vocal-03.wav'))
         self.__samples.append(pygame.mixer.Sound('samples/Noise-04.wav'))
         self.__samples.append(pygame.mixer.Sound('samples/SFX-05.wav'))
         self.__samples.append(pygame.mixer.Sound('samples/Strike-06.wav'))
