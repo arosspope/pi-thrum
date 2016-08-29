@@ -10,7 +10,7 @@ Hardware Requirements
 + Red LED
 + Circuit Leads
 
-Using the above components, construct the circuit as displayed in 'pi-thrum-schem.jpg'. 
+Using the above components, construct the circuit as displayed in the [schematic](pi-thrum-schem.jpg). 
 Please note, that the program/circuit has only been tested on the Pi 3 Model B - although, 
 I'm sure it will still work on older versions of the pi with similar GPIO pin layouts.
 
