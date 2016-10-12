@@ -2,8 +2,7 @@
 Pi-Thrum is a program for the Raspberry Pi that uses the on-board GPIO pins 
 to create a basic 12-step sequencer with retro 8-bit drum samples.
 
-Hardware Requirements
-=====================
+## Hardware Requirements
 + Breadboard
 + 14 x Tactile Push buttons
 + 330 Ohm resistor
@@ -14,14 +13,12 @@ Using the above components, construct the circuit as displayed in the [schematic
 Please note, that the program/circuit has only been tested on the Pi 3 Model B - although, 
 I'm sure it will still work on older versions of the pi with similar GPIO pin layouts.
 
-Software Requirements
-=====================
+## Software Requirements
 Using python 3, the following extra libraries are required:
 + Pygame 1.9.2
 + RPi.GPIO 0.6.2
 
-Running the program
-===================
+## Running the program
 ```
 user@raspberrypi:[pi-thrum]$ python3 pi_thrum.py
 Welcome to pi-thrum! An interactive 12-step sequencer for drum samples!
