@@ -1,7 +1,9 @@
 # Pi-Thrum
 Pi-Thrum is a program for the Raspberry Pi that uses the on-board GPIO pins 
 to create a basic 12-step sequencer with retro 8-bit drum samples.
-A small demo of the program running can be found [here](https://youtu.be/QzZMy-4yDzU).
+A small demo of the program running can be found here:
+
+[![pi-thrum-demo](http://img.youtube.com/vi/QzZMy-4yDzU/0.jpg)](http://www.youtube.com/watch?v=QzZMy-4yDzU)
 
 ## Hardware Requirements
 + Breadboard
