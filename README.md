@@ -42,7 +42,7 @@ When record mode is active, pressing any of the buttons 0 - 11 will assign the m
 played sound to the corresponding step. Running and stopping the sequence is controlled via the
 play button. To halt the entire program, the user must supply the keyboard interrupt CTRL+C.
 
-An simple demo of the project can be found here:
+A simple demo of the project can be found here:
 
 [![pi-thrum-demo](http://img.youtube.com/vi/QzZMy-4yDzU/0.jpg)](http://www.youtube.com/watch?v=QzZMy-4yDzU)
 > Check out my "sick beats"
