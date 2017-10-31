@@ -1,27 +1,36 @@
-# Pi-Thrum
-Pi-Thrum is a program for the Raspberry Pi that uses the on-board GPIO pins 
-to create a basic 12-step sequencer with retro 8-bit drum samples.
-A small demo of the program running can be found here:
+# pi-thrum
 
-[![pi-thrum-demo](http://img.youtube.com/vi/QzZMy-4yDzU/0.jpg)](http://www.youtube.com/watch?v=QzZMy-4yDzU)
+Using a raspberry pi and breadboard, pi-thrum is a simple 12-step sequencer with retro 8-bit drum samples.
 
-## Hardware Requirements
+## Installation
+### Required software packages
+The project has been tested and written for python 3 on a debian based system. In addition to python 3,
+two extra python packages are required for the game to run: [pygame](https://pypi.python.org/pypi/Pygame)(v1.9.2)
+and [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO)(v0.6.2). 
+
+Assuming you have pip, you could install the required packages like so:
+```bash
+$ pip install Pygame==1.9.2		//For playing sound bytes on the pi
+$ pip install RPi.GPIO==0.6.2	//For interacting with the GPIO pins on the pi
+```
+### Hardware setup
+
+In addition to installing software, this project will require you to construct a simple circuit. 
+Using the following parts list:
+
 + Breadboard
-+ 14 x Tactile Push buttons
-+ 330 Ohm resistor
-+ Red LED
-+ Circuit Leads
++ Tactile push buttons (x14)
++ 330 Ohm resistor 
++ Colour LED
++ Jumper leads
 
-Using the above components, construct the circuit as displayed in the [schematic](pi-thrum-schem.jpg). 
-Please note, that the program/circuit has only been tested on the Pi 3 Model B - although, 
-I'm sure it will still work on older versions of the pi with similar GPIO pin layouts.
+Construct the circuit on the breadboard as per the schematic:
+![schematic](https://i.imgur.com/FArZrev.jpg)
 
-## Software Requirements
-Using python 3, the following extra libraries are required:
-+ Pygame 1.9.2
-+ RPi.GPIO 0.6.2
+Please note, that this project has only been tested on the Pi 3 Model B. 
+However, I am sure it will still work on older versions of the pi with similar GPIO pin layouts (you may have to change some of the source code).
 
-## Running the program
+## Operation
 ```
 user@raspberrypi:[pi-thrum]$ python3 pi_thrum.py
 Welcome to pi-thrum! An interactive 12-step sequencer for drum samples!
@@ -38,6 +47,9 @@ When record mode is inactive (as indicated by the LED), buttons 0 - 5 will play 
 drum samples assigned to them.
 When record mode is active, pressing any of the buttons 0 - 11 will assign the mostly recently
 played sound to the corresponding step. Running and stopping the sequence is controlled via the 
-play button. 
+play button. To halt the entire program, the user must supply the keyboard interrupt CTRL+C.
 
-To halt the entire program, the user must supply the keyboard interrupt CTRL+C.
+An simple demo of the project can be found here:
+
+[![pi-thrum-demo](http://img.youtube.com/vi/QzZMy-4yDzU/0.jpg)](http://www.youtube.com/watch?v=QzZMy-4yDzU)
+> Check out my "sick beats"
